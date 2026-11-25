@@ -1,0 +1,25 @@
+Sora-OS License (Personal Use Only)
+Copyright (c) 2026 lazy-commit-ny
+
+1. Personal Use Only
+This software, scripts, and related files are licensed for non-commercial
+personal use, study, and testing on hardware or virtual machines owned or
+controlled by you. Commercial use, business use, paid redistribution, or
+sublicensing is prohibited without prior written permission from the author.
+
+2. AI-Assisted Creation Notice
+Portions of this project's documentation, configuration, and license text
+were created with the assistance of AI and may be revised as needed.
+
+3. Open Source Components
+Open source components included in or used to build Sora-OS (such as the
+Linux kernel, Buildroot, and NetworkManager) remain governed by their
+respective original open source licenses.
+
+4. Disclaimer of Warranty (AS IS)
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
