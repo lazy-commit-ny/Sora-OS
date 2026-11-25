@@ -1,0 +1,83 @@
+name: Build Sora-OS Phase 1
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*" ]
+  workflow_dispatch:
+
+jobs:
+  build-sora-os:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential git libncurses-dev bc bison flex libssl-dev libelf-dev wget cpio unzip rsync xorriso grub-pc-bin grub-efi-amd64-bin mtools
+
+      - name: Clone Buildroot
+        run: git clone --depth 1 https://github.com/buildroot/buildroot.git buildroot
+
+      - name: Configure Sora-OS core & Wi-Fi
+        run: |
+          cd buildroot
+          make pc_x86_64_efi_defconfig
+          cat << 'EOF' >> .config
+          BR2_TARGET_GENERIC_HOSTNAME="Sora-OS"
+          BR2_TARGET_GENERIC_ISSUE="Welcome to Sora-OS"
+
+          # Wi-Fi drivers, firmware & NetworkManager
+          BR2_PACKAGE_LINUX_FIRMWARE=y
+          BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_ALL=y
+          BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=y
+          BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX_BT=y
+          BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=y
+          BR2_PACKAGE_NETWORK_MANAGER=y
+          BR2_PACKAGE_NETWORK_MANAGER_TUI=y
+          BR2_PACKAGE_WPA_SUPPLICANT=y
+          BR2_PACKAGE_DHCPCD=y
+          BR2_PACKAGE_IW=y
+
+          # Basic utilities & fonts
+          BR2_PACKAGE_BASH=y
+          BR2_PACKAGE_DEJAVU=y
+          BR2_PACKAGE_IPA_EX_FONTS=y
+
+          # Live ISO output
+          BR2_TARGET_ROOTFS_ISO9660=y
+          BR2_TARGET_ROOTFS_ISO9660_HYBRID=y
+          BR2_TARGET_GRUB2=y
+          BR2_TARGET_GRUB2_X86_64_EFI=y
+          EOF
+          make olddefconfig
+
+      - name: Copy Sora-OS overlay files
+        run: |
+          mkdir -p buildroot/board/pc/rootfs-overlay
+          cp -r overlay/* buildroot/board/pc/rootfs-overlay/
+          echo 'BR2_ROOTFS_OVERLAY="board/pc/rootfs-overlay"' >> buildroot/.config
+          cd buildroot && make olddefconfig
+
+      - name: Build Sora-OS ISO
+        run: |
+          cd buildroot
+          make -j$(nproc)
+          cp output/images/rootfs.iso ../Sora-OS-x86_64.iso
+
+      - name: Upload ISO artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Sora-OS-x86_64-iso
+          path: Sora-OS-x86_64.iso
+
+      - name: Publish to GitHub Releases on tag
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Sora-OS-x86_64.iso
