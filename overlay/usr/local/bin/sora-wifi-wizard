@@ -1,0 +1,59 @@
+#!/bin/sh
+
+STATE_DIR="/var/lib/sora-os"
+INIT_FLAG="$STATE_DIR/wifi_initialized"
+mkdir -p "$STATE_DIR"
+
+if ! command -v nmcli >/dev/null 2>&1; then
+  echo "[Sora-OS] NetworkManager (nmcli) is not available."
+  exit 1
+fi
+
+# Ensure Wi-Fi radio is enabled
+nmcli radio wifi on >/dev/null 2>&1 || true
+sleep 2
+
+# Check if a saved Wi-Fi connection already exists
+SAVED_WIFI=$(nmcli -t -f NAME,TYPE connection show | awk -F: '$2=="802-11-wireless"{print $1}')
+
+if [ -f "$INIT_FLAG" ] && [ -n "$SAVED_WIFI" ]; then
+  echo "[Sora-OS] Saved Wi-Fi detected. Auto-connecting..."
+  nmcli device wifi rescan >/dev/null 2>&1 || true
+  sleep 2
+  nmcli -t -f ACTIVE,SSID device wifi | grep -q "^yes:" && {
+    echo "[Sora-OS] Connected to Wi-Fi automatically."
+    exit 0
+  }
+fi
+
+clear
+echo "=========================================="
+echo "      Sora-OS First-Time Wi-Fi Setup      "
+echo "=========================================="
+echo "Scanning nearby Wi-Fi networks..."
+nmcli device wifi rescan >/dev/null 2>&1 || true
+sleep 2
+nmcli -f IN-USE,SSID,SIGNAL,SECURITY device wifi list
+
+printf "\nEnter Wi-Fi SSID (or press Enter to skip): "
+read -r SSID
+[ -z "$SSID" ] && exit 0
+
+printf "Enter Wi-Fi Password (leave blank for open network): "
+read -r PASS
+
+echo "Connecting and saving network..."
+if [ -z "$PASS" ]; then
+  nmcli device wifi connect "$SSID"
+else
+  nmcli device wifi connect "$SSID" password "$PASS"
+fi
+
+if [ $? -eq 0 ]; then
+  touch "$INIT_FLAG"
+  echo "Wi-Fi connected and saved! It will auto-reconnect on future boots."
+  sleep 2
+else
+  echo "Failed to connect. Please check SSID/password and try again."
+  sleep 2
+fi
