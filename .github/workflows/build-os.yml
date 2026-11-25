@@ -66,7 +66,11 @@ jobs:
           cp -r overlay/* buildroot/board/pc/rootfs-overlay/
           echo 'BR2_ROOTFS_OVERLAY="board/pc/rootfs-overlay"' >> buildroot/.config
           cd buildroot && make olddefconfig
-
+      - name: Free up disk space
+        run: |
+          sudo apt-get clean
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost /usr/local/lib/android /opt/hostedtoolcache/CodeQL
+          df -h
       - name: Build Sora-OS ISO
         run: |
           cd buildroot
