@@ -31,7 +31,6 @@
       line-height: 1.65;
     }
 
-    /* macOS風 上部メニューバー */
     .topbar {
       position: sticky;
       top: 0;
@@ -86,14 +85,12 @@
       background: #10b981;
     }
 
-    /* メインコンテナ */
     .container {
       max-width: 980px;
       margin: 0 auto;
       padding: 56px 20px 110px;
     }
 
-    /* ヒーロー */
     .hero {
       text-align: center;
       padding: 40px 24px 52px;
@@ -168,7 +165,6 @@
       transform: translateY(-2px);
     }
 
-    /* ウィンドウモックアップ */
     .preview-window {
       margin: 12px auto 64px;
       border-radius: 20px;
@@ -228,7 +224,6 @@
       color: var(--text-sub);
     }
 
-    /* 手順・規約セクション */
     .section {
       margin-top: 48px;
       background: var(--glass);
@@ -288,7 +283,6 @@
       margin-top: 6px;
     }
 
-    /* 下部Dock風ナビゲーション */
     .dock-wrap {
       position: fixed;
       bottom: 16px;
@@ -339,4 +333,120 @@
       <a href="#terms">利用規約</a>
     </div>
     <div class="topbar-right">
-      <span class="status-pill"><span
+      <span class="status-pill"><span class="dot"></span>x86_64 Live ISO</span>
+      <span id="clock">--:--</span>
+    </div>
+  </header>
+  <main class="container">
+    <section class="hero">
+      <span class="badge">Personal Use Edition • 64-bit PC</span>
+      <h1>Sora-OS</h1>
+      <p>
+        Macを意識した洗練された上部メニューバー＆ドックUI、zramメモリ最適化による高速起動、
+        初回案内付きのWi-Fi自動保存・再接続、そしてOS統合型AIを備えたPC用オペレーティングシステム。
+      </p>
+      <div class="cta-group">
+        <a class="btn-primary" href="https://github.com/lazy-commit-ny/Sora-OS/releases" target="_blank" rel="noopener">
+          ISOをダウンロード（GitHub Releases）
+        </a>
+        <a class="btn-secondary" href="https://github.com/lazy-commit-ny/Sora-OS" target="_blank" rel="noopener">
+          GitHubリポジトリを見る
+        </a>
+      </div>
+    </section>
+
+    <section class="preview-window" id="features">
+      <div class="window-header">
+        <span class="traffic red"></span>
+        <span class="traffic yellow"></span>
+        <span class="traffic green"></span>
+        <span class="window-title">Sora-OS System Overview</span>
+      </div>
+      <div class="window-body">
+        <div class="card">
+          <h3>高速起動 &amp; zramメモリ最適化</h3>
+          <p>起動データの先読みとzram圧縮キャッシュにより、限られたメモリ環境でも起動から操作まで軽快に動作します。</p>
+        </div>
+        <div class="card">
+          <h3>スマートWi-Fi自動接続</h3>
+          <p>初回起動時（および初期化後）にWi-Fi設定案内を表示。一度接続したネットワークは自動保存され、次回以降自動再接続します。</p>
+        </div>
+        <div class="card">
+          <h3>洗練されたデスクトップUI</h3>
+          <p>画面上部のシステムメニューバーと下部のアプリドックを採用し、直感的で視認性の高い操作体験を提供します。</p>
+        </div>
+        <div class="card">
+          <h3>OS標準のAI統合</h3>
+          <p>文章作成の補助や画像編集、自然な言葉でのローカルファイル検索をOSレベルでサポートします。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="install">
+      <h2>ダウンロードと起動手順</h2>
+      <ol class="steps">
+        <li>
+          <span class="step-num">1</span>
+          <div>
+            <strong>ISOイメージを取得</strong><br>
+            <a href="https://github.com/lazy-commit-ny/Sora-OS/releases" target="_blank" rel="noopener">GitHub Releases</a> から最新の <code>Sora-OS-x86_64.iso</code> をダウンロードします。
+          </div>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <div>
+            <strong>USBメモリへ書き込み</strong><br>
+            <strong>Rufus</strong> または <strong>balenaEtcher</strong> などの書き込みツールを使い、空のUSBメモリにISOを書き込みます。
+          </div>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <div>
+            <strong>USBからPCを起動</strong><br>
+            64bit対応PCにUSBメモリを挿して電源を入れ、BIOS / UEFI のブートメニューからUSBドライブを選択して起動します。
+          </div>
+        </li>
+        <li>
+          <span class="step-num">4</span>
+          <div>
+            <strong>初回Wi-Fiセットアップ</strong><br>
+            初回起動時は案内に従ってSSIDとパスワードを入力すると、接続と自動再接続設定が完了します。
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="section" id="terms">
+      <h2>利用規約・免責事項
+        </h2>
+      <div class="notice">
+        <ul>
+          <li><strong>個人利用限定（商用利用禁止）：</strong>本OSは個人での利用・試用・検証を目的として無償公開しています。作者の許可なく商用利用・営利目的での再配布・販売を行うことは禁止します。</li>
+          <li><strong>免責事項：</strong>本ソフトウェアは無保証で提供されます。実機PCでテストを行う際は、必ず事前に大切なデータのバックアップをお取りください。</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <nav class="dock-wrap" aria-label="クイックナビゲーション">
+    <div class="dock">
+      <a href="#features">特徴</a>
+      <a href="#install">導入手順</a>
+      <a href="#terms">利用規約</a>
+      <a href="https://github.com/lazy-commit-ny/Sora-OS/releases" target="_blank" rel="noopener">ダウンロード</a>
+    </div>
+  </nav>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const el = document.getElementById('clock');
+      if (el) el.textContent = h + ':' + m;
+    }
+    updateClock();
+    setInterval(updateClock, 15000);
+  </script>
+</body>
+</html>
