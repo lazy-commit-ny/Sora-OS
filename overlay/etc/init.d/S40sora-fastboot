@@ -1,0 +1,17 @@
+#!/bin/sh
+
+case "$1" in
+  start)
+    echo "[Sora-OS] Optimizing memory & fast-boot settings..."
+    if [ -e /dev/zram0 ] && [ -w /sys/block/zram0/disksize ]; then
+      MEM_KB=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
+      ZRAM_BYTES=$((MEM_KB * 1024 / 2))
+      echo "$ZRAM_BYTES" > /sys/block/zram0/disksize 2>/dev/null || true
+      mkswap /dev/zram0 >/dev/null 2>&1 && swapon /dev/zram0 >/dev/null 2>&1 || true
+    fi
+    sysctl -w vm.swappiness=20 >/dev/null 2>&1 || true
+    ;;
+  stop)
+    swapoff /dev/zram0 >/dev/null 2>&1 || true
+    ;;
+esac
